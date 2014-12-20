@@ -15,7 +15,7 @@ struct SPIData{
 
 void startSPI(SPIData *data);
 void closeSPI();
-void sevenSegmentSM(SPIData *data);
+void sevenSegmentFSM(SPIData *data);
 
 #endif // SevenSeg_H
 

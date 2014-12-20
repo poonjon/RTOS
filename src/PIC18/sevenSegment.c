@@ -39,7 +39,7 @@ void closeSPI(){
     PORTCbits.RC2 = 0;
 }
 
-void sevenSegmentSM(SPIData *data){
+void sevenSegmentFSM(SPIData *data){
     int i=0;
     switch(data->state){
     case SPI_START:

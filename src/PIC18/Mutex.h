@@ -1,12 +1,25 @@
 #ifndef Mutex_H
 #define Mutex_H
+#include "PriorityLinked.h"
 
-typedef struct{
-  int counter 
-  TCB *ownerl
-  TCB missingAvenue
+typedef enum {
+  LOCKED,
+  UNLOCKED
+}State;
+  
+typedef struct mutexData mutexData;
 
-}Mutex
+struct mutexData{
 
-#endif //Mutex_H
+	State state;
+	int count;
+	TCB *owner; 
+	PriorityLinkedList waitingQueue;
+  
+};
 
+mutexData* initMutex();
+int acquireMutex(mutexData *data);
+int releaseMutex(mutexData *data);
+
+#endif // Mutex_H
