@@ -31,8 +31,16 @@ int acquireMutex(mutexData *data){
 
 void releaseMutex(mutexData *data){
   
-  data->count++;;
+  data->count++;
   if(data->count < 1){}
-  else
-    data->owner = NULL;
+  else{
+    if(data->waitingQueue.head == NULL){
+      runningTCB = NULL;
+    }
+    else{
+      runningTCB = removeFromHeadPriorityLinkedList(&(data->waitingQueue));
+      data->owner = runningTCB;
+      data->count--;
+    }
+  }
 }

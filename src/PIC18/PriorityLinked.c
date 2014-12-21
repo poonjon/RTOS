@@ -1,6 +1,6 @@
 #include "PriorityLinked.h"
 #include <stdio.h>
-/*
+
 #include "malloc.h"
 
 
@@ -9,7 +9,7 @@ PriorityLinkedList *createPriorityLinkedList(){
   list->head = NULL;
   return list;
 }
-*/
+
 /**
   * compare listElement with insertElement
   * return 0: listElement > insertElement
@@ -59,9 +59,14 @@ void addPriorityLinkedList(PriorityLinkedList *list, void *data, int compare(voi
       else{
         while(compare(newList, data) == 0){
           
-          if(compare(newList->next, data) == 1){
+          if(newList->next == NULL){
+            newList->next = (TCB *)data;
+            list->tail = newList->next;
+            break;
+          }
+          else if(compare(newList->next, data) == 1){
             ((TCB *)data)->next = prevList->next;
-            prevList->next = (TCB *)data;
+            prevList->next = (TCB *)data;           
             break;
           }
           prevList = newList;

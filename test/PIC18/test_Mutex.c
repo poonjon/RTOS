@@ -64,11 +64,26 @@ void test_releaseMutex_should_release_owner(){
   TCB task1 = {.priority = 0};
   TCB task2 = {.priority = 0};
   mutexData mutex = {.count = 0, .owner = &task1} ;
-  runningTCB = &task1;
+  runningTCB = NULL;
+  mutex.waitingQueue.head = &task1;
+  releaseMutex(&mutex);
+  
+  TEST_ASSERT_NULL(mutex.waitingQueue.head);
+  TEST_ASSERT_EQUAL_PTR(&task1, runningTCB);
+  TEST_ASSERT_EQUAL(0, mutex.count); 
+}
+
+void test_releaseMutex_should_release_NULL(){
+  TCB task1 = {.priority = 0};
+  TCB task2 = {.priority = 0};
+  mutexData mutex = {.count = 0, .owner = &task1} ;
+  runningTCB = NULL;
+  mutex.waitingQueue.head = NULL;
   
   releaseMutex(&mutex);
   
-  TEST_ASSERT_NULL(mutex.owner);
+  TEST_ASSERT_NULL(mutex.waitingQueue.head);
+  TEST_ASSERT_NULL(runningTCB);
   TEST_ASSERT_EQUAL(1, mutex.count); 
 }
 

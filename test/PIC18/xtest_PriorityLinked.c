@@ -158,3 +158,23 @@ void test_addPriorityLinked_inbetween_priority_TCB1_into_list(){
   
 }
 
+void test_addPriorityLinked_add_same_priority_TCB3_into_list(){
+  PriorityLinkedList *list;
+  list = createPriorityLinkedList();
+  
+  TCB TCB3 = {.next = NULL, .priority = 0};
+  TCB TCB2 = {.next = NULL, .priority = 0};
+  TCB TCB1 = {.next = &TCB2, .priority = 0};
+
+  list->head = &TCB1;
+  list->tail = &TCB2;
+
+  addPriorityLinkedList(list, &TCB3, comparePriority);
+  TEST_ASSERT_EQUAL(&TCB1, list->head);
+  TEST_ASSERT_EQUAL(&TCB3, list->tail);
+  TEST_ASSERT_EQUAL(&TCB2, TCB1.next);
+  TEST_ASSERT_EQUAL(&TCB3, TCB2.next);
+  TEST_ASSERT_NULL(TCB3.next);
+  
+}
+

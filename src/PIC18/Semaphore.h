@@ -2,10 +2,14 @@
 #define Semaphore_H
 #include "PriorityLinked.h"
 
-typedef struct{
+typedef struct semaphoreData{
   int counter;
   int maxCounter;
   PriorityLinkedList waitingQueue;
-}Semaphore;
+}semaphoreData;
+
+semaphoreData* initSemaphore(int counter);
+void upSemaphore(semaphoreData *semaphore);
+int downSemaphore(semaphoreData *semaphore);
 
 #endif // Semaphore_H
