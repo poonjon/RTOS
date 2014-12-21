@@ -1,8 +1,9 @@
 #include "unity.h"
-#include "Mutex.h"
-#include <malloc.h>
 #include "TCB.h"
 #include "PriorityLinked.h"
+#include "Mutex.h"
+#include "PreemptiveOS.h"
+#include <malloc.h>
 
 extern TCB *runningTCB;
 
@@ -19,4 +20,15 @@ void test_create_new_mutex(){
 	TEST_ASSERT_NULL(mutex->waitingQueue.tail);
 	TEST_ASSERT_NULL(mutex->owner);
 	TEST_ASSERT_EQUAL(UNLOCKED, mutex->state);
+}
+
+void test_acquireMutex_should_return_1_acquire_mutex(){
+  mutexData *mutex;
+
+  mutex = initMutex();
+  acquireMutex(mutex);
+  TEST_ASSERT_EQUAL(LOCKED, mutex->state);
+  TEST_ASSERT_EQUAL(runningTCB, mutex->owner);
+  TEST_ASSERT_EQUAL(1, mutex->count);
+  
 }

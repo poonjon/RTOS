@@ -1,5 +1,7 @@
 #ifndef PreemptiveOS_H
 #define PreemptiveOS_H
+#include "TCB.h"
+#include "PriorityLinked.h"
 
 extern TCB *runningTCB;
 extern PriorityLinkedList readyQueue;
