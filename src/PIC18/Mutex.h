@@ -3,9 +3,9 @@
 #include "TCB.h"
 #include "PriorityLinked.h"
 
-typedef struct mutexData mutexData;
+typedef struct MutexData MutexData;
 
-struct mutexData{
+struct MutexData{
 
 	int count;
 	TCB *owner; 
@@ -13,8 +13,8 @@ struct mutexData{
   
 };
 
-mutexData* initMutex();
-int acquireMutex(mutexData *data);
-void releaseMutex(mutexData *data);
+void initMutex(MutexData *mutex);
+int acquireMutex(MutexData *mutex);
+void releaseMutex(MutexData *mutex);
 
 #endif // Mutex_H

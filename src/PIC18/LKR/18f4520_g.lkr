@@ -43,9 +43,12 @@ CODEPAGE   NAME=eedata     START=0xF00000          END=0xF000FF       PROTECTED
 
 DATABANK   NAME=gpr0       START=0x80              END=0xFF
 DATABANK   NAME=gpr1       START=0x100             END=0x1FF
-DATABANK   NAME=gpr2       START=0x200             END=0x2FF
-DATABANK   NAME=gpr3       START=0x300             END=0x3FF
+//DATABANK   NAME=gpr2       START=0x200             END=0x2FF
+//DATABANK   NAME=gpr3       START=0x300             END=0x3FF
+DATABANK   NAME=bigdata       START=0x200             END=0x3FF
 DATABANK   NAME=gpr4       START=0x400             END=0x4FF
+
+SECTION NAME=BIGDATA RAM=bigdata
 
 #IFDEF _DEBUGDATASTART
   DATABANK   NAME=gpr5       START=0x500             END=_DATAEND

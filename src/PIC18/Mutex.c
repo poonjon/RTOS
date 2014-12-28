@@ -1,46 +1,66 @@
-#include "TCB.h"
 #include "Mutex.h"
+#include "TCB.h"
 #include "PriorityLinked.h"
-#include <malloc.h>
+#include "PreemptiveOS.h"
+#include <stdio.h>
+#include "Interrupt.h"
 
-TCB *runningTCB;
+// ignore scheduler for PC test
+#if !(defined(__XC) || defined(__18CXX))
+  #define timer0isr()
+#else
+  #include Clock.h
+#endif // __18CXX
 
-mutexData* initMutex(){
-  mutexData *mutex = malloc(sizeof(mutexData));
+void initMutex(MutexData *mutex){
+  
 	mutex->count = 1;
 	mutex->waitingQueue.head = NULL;
 	mutex->waitingQueue.tail = NULL;
+	readyQueue.tail = NULL;
+	readyQueue.head = NULL;
 	mutex->owner = NULL;
-  
-	return mutex;
-}
-
-int acquireMutex(mutexData *data){
-  
-  if(data->count == 1 || data->owner == runningTCB){
-    data->owner = runningTCB;
-    data->count--;
-    return 1;
-  }
-  else{
-    addPriorityLinkedList(&(data->waitingQueue), runningTCB, comparePriority);
-    return 0;
-  }
  
 }
 
-void releaseMutex(mutexData *data){
-  
-  data->count++;
-  if(data->count < 1){}
+int acquireMutex(MutexData *mutex){
+  disableGlobalInterrupt();
+  if(mutex->count == 1 || mutex->owner == runningTCB){
+    mutex->owner = runningTCB;
+    mutex->count--;
+    return 1;
+  }
   else{
-    if(data->waitingQueue.head == NULL){
-      runningTCB = NULL;
-    }
+    addPriorityLinkedList(&(mutex->waitingQueue), runningTCB, comparePriority);
+    readyQueueFlag = 1;
+    timer0isr();
+    readyQueueFlag = 0;
+    return 0;
+  }
+ 
+  enableGlobalInterrupt();
+}
+
+void releaseMutex(MutexData *mutex){
+  TCB *temp = NULL;
+  disableGlobalInterrupt();
+  
+  if(mutex->owner == runningTCB){
+    
+    mutex->count++;  
+    if(mutex->count < 1){}
     else{
-      runningTCB = removeFromHeadPriorityLinkedList(&(data->waitingQueue));
-      data->owner = runningTCB;
-      data->count--;
+      if(mutex->waitingQueue.head == NULL){
+        mutex->owner = NULL;
+      }
+      else{
+        temp = removeFromHeadPriorityLinkedList(&(mutex->waitingQueue));
+        addPriorityLinkedList(&readyQueue, temp, comparePriority);
+        mutex->owner = temp;
+        mutex->count--;
+      }
     }
   }
+  enableGlobalInterrupt();
 }
+

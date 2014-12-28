@@ -1,13 +1,10 @@
 #include "PriorityLinked.h"
 #include <stdio.h>
+#include "TCB.h"
 
-#include "malloc.h"
-
-
-PriorityLinkedList *createPriorityLinkedList(){
-  PriorityLinkedList *list = malloc(sizeof(PriorityLinkedList));
+void createPriorityLinkedList(PriorityLinkedList *list){
   list->head = NULL;
-  return list;
+  list->tail = NULL;
 }
 
 /**
@@ -31,8 +28,12 @@ int comparePriority(void *listElement, void *insertElement){
 
 void *removeFromHeadPriorityLinkedList(PriorityLinkedList *list){
   TCB *removedElement;
+  
   removedElement = list->head;
-  list->head = list->head->next;
+  if(list->head != NULL){
+    list->head = list->head->next;
+    removedElement->next = NULL;
+  }
   if(list->head == NULL){
     list->tail = NULL;
   }
@@ -54,7 +55,7 @@ void addPriorityLinkedList(PriorityLinkedList *list, void *data, int compare(voi
     if(compare(newList, data) == 0){
       if(newList->next == NULL){
         newList->next = (TCB *)data;
-        list->tail = (TCB *)data;
+        list->tail = newList->next;
       }
       else{
         while(compare(newList, data) == 0){
@@ -79,6 +80,7 @@ void addPriorityLinkedList(PriorityLinkedList *list, void *data, int compare(voi
         list->head = (TCB *)data;
       }
       ((TCB *)data)->next = newList;
+      list->tail = newList;
     } 
   }
 }

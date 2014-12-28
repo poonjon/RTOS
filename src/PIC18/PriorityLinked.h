@@ -8,7 +8,7 @@ struct PriorityLinkedList{
   TCB *tail;
 };
 
-PriorityLinkedList *createPriorityLinkedList();
+void createPriorityLinkedList(PriorityLinkedList *list);
 int comparePriority(void *listElement, void *insertElement);
 void *removeFromHeadPriorityLinkedList(PriorityLinkedList *list);
 void addPriorityLinkedList(PriorityLinkedList *list, void *data, int compare(void *, void *));

@@ -3,11 +3,11 @@
 #include "Semaphore.h"
 #include "TCB.h"
 
-typedef struct barrierData{
+typedef struct BarrierData{
   int barrierLimit;
   
-}barrierData;
+}BarrierData;
 
-
-void addTask(semaphoreData *semaphore, TCB *task, barrierData *numOfTasks);
+void setBarrierLimit(BarrierData *barrier, int limit);
+void addTask(SemaphoreData *semaphore, TCB *task, BarrierData *barrier);
 #endif // Barrier_H

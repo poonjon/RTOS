@@ -42,7 +42,7 @@ unsigned long getClock(void){
   }*/
   return clock;
 }
-#pragma interruptlow timer0isr
+#pragma interruptlow timer0isr save = FSR2L
 
 #pragma code high_vector = 0x08
 void highPriorityIsr(void){
